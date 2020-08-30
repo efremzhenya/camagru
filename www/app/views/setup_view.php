@@ -1,6 +1,11 @@
-<h1>Setup database</h1>
+<?php
+	if ($data != null)
+	{
+		extract($data);
+	}
+?>
 
-<!-- <?php extract($data); ?> -->
+<h1>Setup database</h1>
 
 <br>
 <?php if (!isset($data['is_success']) || $data['is_success'] != 1){ ?>

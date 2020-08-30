@@ -1,3 +1,7 @@
+<?
+echo phpinfo();
+?>
+
 <html>
  <head>
   <title>Hello...</title>

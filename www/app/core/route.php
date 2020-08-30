@@ -21,10 +21,12 @@ class Route
 		{
 			$action_name = $routes[2];
 		}
-		if (dao::$conn == null)
+
+		// initialize data access object
+		if (dao::$connection == null)
 		{
-			dao::initWithConfig();
-			if (dao::$conn == null)
+			dao::init();
+			if (dao::$PDOErrorCode != null)
 			{
 				$controller_name = 'Main';
 				$action_name = 'setup';

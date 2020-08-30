@@ -1,40 +1,38 @@
 <?php
 
-class dao{
-	public static $conn;
+class dao
+{
+    public static $connection;
+    public static $PDOErrorCode;
 
-    public function is_db_exists()
+    private static function connect($dsn, $username, $password)
+	{
+		try {
+            $connection = new PDO($dsn, $username, $password);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $PDOErrorCode = null;
+        }
+        catch (PDOException $e)
+        {
+            PDOErrorCode = $e->getCode();
+            $connection = null;
+        }
+    }
+
+    public static function is_db_exists()
     {
-        if ($this::$conn->exec("SHOW DATABASES LIKE 'camagru_db';"))
+        if ($connection->exec("SHOW DATABASES LIKE 'camagru_db';"))
         {
             return true;
         }
         else return false;
     }
 
-    public function __construct($dsn, $db_username, $db_password) {
-
-        $this->connect($dsn, $db_username, $db_password);
-    }
-
-    public static function initWithConfig($isSetupMode = false) {
+    public static function init($isSetupMode = false) {
         require $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
-        $instance = new self($isSetupMode ? $dsn_setup : $dsn, $db_username, $db_password);
-        return $instance;
+        dao::connect(($isSetupMode ? $dsn_setup : $dsn), $db_username, $db_password);
     }
 
-
-	private function connect($dsn, $username, $password)
-	{
-		try {
-            $this::$conn = new PDO($dsn, $username, $password);
-            $this::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        }
-        catch (PDOException $e)
-        {
-            $this::$conn = null;
-        }
-    }
 
     // public function select( $table , $where='' , $other='' ){
     //    if ($where != '' ){  // condition was wrong
